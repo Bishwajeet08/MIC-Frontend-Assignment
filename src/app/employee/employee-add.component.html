@@ -1,0 +1,76 @@
+<div class="component-container">
+  <mat-toolbar class="mat-elevation-z2 details-toolbar">
+    <h3>Create Employee</h3>
+  </mat-toolbar>
+  <div class="addNewEmployeeBtn pull-right" (click)="addNewEmployeeBtn()">+</div>
+  <div [hidden]="submitted">
+    <mat-card>
+      <form [formGroup]="empAddForm" (ngSubmit)="addEmployee()">
+        <div class=" fields-margin">
+          <div class="row flex">
+            <div class="col-md-9">
+
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field>
+                    <input matInput formControlName="name" placeholder="Name">
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field>
+                    <mat-select name="department" formControlName="department" placeholder="Department">
+                      <mat-option *ngFor="let a of departments" [value]="a.departmentName">
+                        {{a.departmentName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <mat-toolbar>
+                <div style="flex: 1"></div>
+                <button mat-raised-button class="card-toolbar-button">Submit</button>
+              </mat-toolbar>
+            </div>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>
+
+<div [hidden]="!submitted">
+  <h4>You submitted successfully!</h4>
+</div>
+
+<div>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Filter By Department">
+  </mat-form-field>
+</div>
+
+
+<div class="example-container mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="department">
+      <th mat-header-cell *matHeaderCellDef> Department </th>
+      <td mat-cell *matCellDef="let element"> {{element.department}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="options">
+      <mat-header-cell *matHeaderCellDef> Options </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button (click)="deleteEmployee(dataSource.filteredData.indexOf(element))">Delete</button>
+        <button (click)="openDialog(dataSource.filteredData.indexOf(element))">Edit</button>
+      </mat-cell>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;let i = dataIndex;"></tr>
+  </table>
+</div>
